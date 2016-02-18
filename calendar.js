@@ -85,6 +85,30 @@
 		},
 		getDaysInMonth: function(month, year){
 			 return [31, (this.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+		},
+		getMonthName: function(month){
+			return ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'][month]
+		},
+		isSarursday: function(date){
+			if(date.getDay() === 6){
+				return true;
+			}else{
+				return false;
+			}
+		},
+		isSunday: function(date){
+			if(date.getDay() === 0){
+				return true;
+			}else{
+				return false;
+			}
+		},
+		isWeekend: function(date){
+			if(this.isSatursday(date) && this.isSunday(date)){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	});
 	
@@ -146,6 +170,10 @@
 				return document.getElementById(id);
 			},
 			
+			query: function(selector){
+				return document.querySelectorAll(selector);
+			},
+			
 			// 创建元素
 			createE: function(tag, propObj){
 				var e = document.createElement(tag);
@@ -158,8 +186,11 @@
 		}
 	});
 	
+	// 声明实例对象
 	var calendar = __.declare('Calendar', [date, http, dom], {
 		dateEvents: [],
+		country: 'China',
+		
 		URLs: {
 			holidays: './holidays.json',
 			customEvents: './customEvents.json'
@@ -174,9 +205,10 @@
 		// 渲染HTML结构
 		renderHTML: function(){
 			var calendar = this.dom.byId('calendar');
+			var currentYear = this.currentYear();
 			var cHeader = this.dom.createE('div', {
 				id: 'cHeader',
-				innerHTML: ''
+				innerHTML: '<div id="cHeader-Year"><a>'+ (currentYear - 1) +'</a> <a class="highlight">'+ currentYear +'</a> <a>'+ (currentYear + 1) +'</a></div><div id="cHeader-Month">'+ this.getMonthName(this.currentMonth()) +'</div>'
 			});
 			
 			var cBody = this.dom.createE('div', {
@@ -214,8 +246,10 @@
 					}else{
 						if(day === this.today.getDate()){
 							bodyHTML += '<span class="highlight">'+ day +'</span>';
+						}else if(c === 6 || c === 7){
+							bodyHTML += '<span class="weekend-day">'+ day +'</span>';
 						}else{
-							bodyHTML += '<span>'+ day +'</span>';
+							bodyHTML += '<span data-day="'+ day +'">'+ day +'</span>';
 						}
 					}
 					
@@ -230,7 +264,25 @@
 		
 		// 添加日期对应的TODO事件
 		appendTodoToDate: function(){
+			var _this = this;
 			this.xhrGet(this.URLs.holidays, function(data){
+				var holidays = data[_this.country];
+				
+				var d = 0;
+				var availHolidayArr = [];
+				for(; d < holidays.length; d++){
+					var holidayArr = data[_this.country][d].split('#');
+					var holiday = holidayArr[0];
+					var holidayName = holidayArr[1];
+					if(holiday.split('/')[0] == _this.currentMonth()){
+						//availHolidayArr.push(holiday[d]);
+						var holidayDayNode = _this.dom.query('span[data-day="'+ holiday.split('/')[1] +'"]')[0];
+						holidayDayNode.setAttribute('class', 'holiday-day')
+						holidayDayNode.appendChild(_this.dom.createE('em', {
+							innerHTML: holidayName
+						}));
+					}
+				}
 			}, function(){
 			});
 			this.initEvents();

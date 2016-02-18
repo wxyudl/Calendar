@@ -1,10 +1,41 @@
+#calendar{
+	display: inline-block;
+	font-family: '微软雅黑';
+	border: 1px solid #999999;
+	padding: 20px 10px 0px 10px;
+	width: 90%;
+}
+
+#calendar #cHeader{
+	text-align: center;
+}
+
+#calendar #cHeader #cHeader-Year{
+	margin-bottom: 15px;
+}
+
+#calendar #cHeader #cHeader-Year a{
+	margin: 0 4px;
+	font-size: 20px;
+}
+
+#calendar #cHeader #cHeader-Year .highlight{
+	border-bottom: 2px solid red;
+	font-weight: bold;
+}
+
+#calendar #cBody p{
+	overflow: hide;
+}
+
 #calendar #cBody p span{
 	display: inline-block;
-	padding: 10px 15px;
+	padding: 1%;
 	height: 80px;
-	width: 80px;
+	width: 10%;
 	border: 1px solid #999999;
-	margin: 0 4px;
+	margin: 0 1%;
+	vertical-align: middle;
 }
 
 #calendar #cBody p span:hover{
@@ -12,6 +43,25 @@
 	border-color: red;
 }
 
+#calendar #cBody p span.weekend-day{
+	color: #F77613;
+	border-color: #F77613;
+}
+
 #calendar #cBody p span.highlight{
 	background-color: yellow;
+}
+
+#calendar #cBody .holiday-day{
+	background-color: #C6EFFF;
+}
+
+#calendar #cBody .holiday-day em{
+	display: block;
+    font-size: 13px;
+    font-style: normal;
+    background: #EF4911;
+    color: #FFF;
+    padding: 2px 4px;
+    border-radius: 4px;
 }
