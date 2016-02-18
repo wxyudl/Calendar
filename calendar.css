@@ -1,0 +1,17 @@
+#calendar #cBody p span{
+	display: inline-block;
+	padding: 10px 15px;
+	height: 80px;
+	width: 80px;
+	border: 1px solid #999999;
+	margin: 0 4px;
+}
+
+#calendar #cBody p span:hover{
+	cursor: pointer;
+	border-color: red;
+}
+
+#calendar #cBody p span.highlight{
+	background-color: yellow;
+}
